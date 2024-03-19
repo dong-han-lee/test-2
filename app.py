@@ -24,9 +24,21 @@ import tempfile, os
 app = Flask(__name__)
 
 # 必須放上自己的Channel Access Token
-line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
-# 必須放上自己的Channel Secret
-handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
+ # get channel_secret and channel_access_token from your environment variable
+
+channel_secret = os.getenv('LINE_CHANNEL_SECRET',  None)
+channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN',  None)
+
+if channel_secret is None:
+    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    sys.exit(1)
+
+if channel_access_token is None:
+    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    sys.exit(1)
+
+line_bot_api = LineBotApi(channel_access_token)
+parser = WebhookParser(channel_secret)
 
 line_bot_api.push_message('Uf12e9d51f45c5f2e1205b7d04ee6f901', TextSendMessage(text='你可以開始了'))
 
